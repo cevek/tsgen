@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { FileGenerator } from './generator';
+import {FileGenerator} from './generator';
 import * as path from 'path';
-import { Command } from 'commander';
+import {Command} from 'commander';
 
 interface GeneratorOptions {
     watch: boolean;
@@ -20,19 +20,19 @@ async function main() {
         .option('-o, --output <dir>', 'Output directory for generated files', 'output')
         .argument('[templates]', 'Directory containing templates', path.join(__dirname, 'templates'))
         .action(async (templatesDir: string, options: GeneratorOptions) => {
-            console.log('Options:', options);
             console.log('Templates directory:', templatesDir);
             console.log('Output directory:', options.output);
-            console.log('Watch mode:', options.watch);
+            if (options.watch) {
+                console.log('Watching templates directory for changes...');
+            }
 
             const generator = new FileGenerator(templatesDir, options.watch, options.output);
             await generator.init();
 
             try {
+                await generator.generateAll();
                 if (options.watch) {
                     await generator.watchAll();
-                } else {
-                    await generator.generateAll();
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -45,4 +45,4 @@ async function main() {
 
 if (require.main === module) {
     main();
-} 
+}

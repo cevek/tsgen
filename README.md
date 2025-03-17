@@ -70,10 +70,8 @@ export const <%= componentName %>: React.FC = () => {
 ### Configuration Example (config.ts)
 
 ```typescript
-import * as path from 'path';
-
 export default {
-  outputPath: path.join(__dirname, '../../output/MyComponent.tsx'),
+  outputPath: 'MyComponent.tsx',
   data: {
     componentName: 'MyComponent'
   }
